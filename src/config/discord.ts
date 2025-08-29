@@ -3,9 +3,11 @@ import {
   Client,
   Interaction,
   GatewayIntentBits,
+  Events,
 } from "discord.js";
 import dotenv from "dotenv";
 import commandRouter from "../router/router";
+import { brawlPick } from "../command/brawlBenPick.Command";
 
 dotenv.config();
 
@@ -47,6 +49,21 @@ const startDiscordBot = async () => {
 client.on(
   "interactionCreate",
   async (interaction: Interaction) => {
+    // 자동완성 요청 처리
+    if (interaction.isAutocomplete()) {
+      if (interaction.commandName === "brawl" && brawlPick.autocomplete) {
+        await brawlPick.autocomplete(interaction);
+      }
+      return;
+    }
+
+    // 명령어 실행 처리
+    if (interaction.isChatInputCommand()) {
+      if (interaction.commandName === "brawl") {
+        await brawlPick.execute(client, interaction);
+      }
+    }
+
     if (interaction.isCommand()) {
       console.log(`명령어 실행: ${interaction.commandName}`);
       const currentCommand = commandRouter.find(

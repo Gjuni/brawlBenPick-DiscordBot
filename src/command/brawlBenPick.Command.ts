@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType } from "discord.js";
+import { ApplicationCommandOptionType, AutocompleteInteraction } from "discord.js";
 import { SlashCommand } from "../DTO/slashCommand.DTO";
 import * as fs from "fs";
 import * as path from "path";
@@ -77,11 +77,13 @@ export const brawlPick : SlashCommand = {
                 }
 
                 // 추천 브롤러 목록을 문자열로 만듦
-                let content = `추천 브롤러 (star 기준)\n\n`;
+                const mapType = `맵 타입 : ${type}\n`;
+                const mapName = `맵 이름 : ${name}\n\n`;
+                let content = mapType+mapName + `추천 브롤러 (star 기준)\n`;
                 result.forEach((brawler, i) => {
                     content += `${i + 1}. ${brawler.name} (⭐ ${brawler.star}, 승률: ${brawler.winRate})\n`;
                 });
-
+                
                 await interaction.reply({
                     content
                 });
@@ -102,23 +104,26 @@ export const brawlPick : SlashCommand = {
 
     // 자동완성 핸들러 추가
     autocomplete: async (interaction) => {
-        const focusedOption = interaction.options.getFocused(true);
-        const type = interaction.options.getString("type");
-        if (focusedOption.name === "name" && type) {
-            if (!fs.existsSync(dataPath)) {
-                await interaction.respond([]);
-                return;
-            }
-            const data = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
-            const maps = Object.keys(data[type] || {});
-            const filtered = maps.filter(map =>
-                map.toLowerCase().includes(focusedOption.value.toLowerCase())
-            ).slice(0, 25); // Discord는 최대 25개까지 반환 가능
-            await interaction.respond(
-                filtered.map(map => ({ name: map, value: map }))
-            );
-        } else {
+    const focusedOption = interaction.options.getFocused(true);
+    // type 값을 안전하게 가져오기
+    const type = interaction.options.get("type")?.value as string | undefined;
+
+    if (focusedOption.name === "name" && type) {
+        if (!fs.existsSync(dataPath)) {
             await interaction.respond([]);
+            return;
         }
+        const data = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
+        const maps = Object.keys(data[type] || {});
+        const search = (focusedOption.value ?? "").toLowerCase();
+        const filtered = maps.filter(map =>
+            map.toLowerCase().includes(search)
+        ).slice(0, 25); // Discord는 최대 25개까지 반환 가능
+        await interaction.respond(
+            filtered.map(map => ({ name: map, value: map }))
+        );
+    } else {
+        await interaction.respond([]);
     }
+}
 }

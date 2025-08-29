@@ -88,6 +88,8 @@ async function crawl() {
             brawlers.slice(0, 8).forEach((brawler, idx) => {
                 result[mode.key][mapName][`brawler${idx + 1}`] = brawler;
             });
+        } else {
+          continue;
         }
 
         const brawlerNames = brawlers.slice(0, 8).map(b => b.name).join(", ");

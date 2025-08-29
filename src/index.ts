@@ -21,12 +21,12 @@ router.get('/', (req, res) => {
     res.json('aws discord bot');
 });
 
-cron.schedule('0 18 * * *', () => {
-    console.log('크롤링 실행: KST 03:00');
-    crawl();
-}, {
-    timezone: 'Asia/Seoul'
-});
+// cron.schedule('0 18 * * *', () => {
+//     console.log('크롤링 실행: KST 03:00');
+//     crawl();
+// }, {
+//     timezone: 'Asia/Seoul'
+// });
 
 app.listen(port, () => {
     console.log(`Server is Running on port ${port}`);
