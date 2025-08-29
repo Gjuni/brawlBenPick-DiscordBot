@@ -1,0 +1,36 @@
+{
+  "name": "brawlbenpick-discordbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon --watch src --ext ts,js --exec \"ts-node src/index.ts\"",
+    "start": "npm run build && node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gjuni/brawlBenPick-DiscordBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gjuni/brawlBenPick-DiscordBot/issues"
+  },
+  "homepage": "https://github.com/Gjuni/brawlBenPick-DiscordBot#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "discord.js": "^14.22.1",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "morgan": "^1.10.1",
+    "nodemon": "^3.1.10",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/morgan": "^1.9.10",
+    "ts-node": "^10.9.2"
+  }
+}
