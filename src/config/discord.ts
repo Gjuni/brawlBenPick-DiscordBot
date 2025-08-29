@@ -5,6 +5,7 @@ import {
   GatewayIntentBits,
 } from "discord.js";
 import dotenv from "dotenv";
+import commandRouter from "../router/router";
 
 dotenv.config();
 
